@@ -28,6 +28,11 @@ start:
         PRINTN   "Part (A) - should print 23"
 ; Write your code here
 
+        mov ax, num1
+        mov bx, num2
+        mul bx
+        add ax, num3
+
         call print_num
         PRINTN
 
@@ -77,3 +82,4 @@ start:
 		ret
 
 include magshimim.inc
+
