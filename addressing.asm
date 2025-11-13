@@ -12,8 +12,8 @@ chrs    db  'A','B','C','D'
 chrs_ptr    dw  offset chrs
 
 ; [belongs to (D)] - for the "static" part, change only these two lines
-static_num1_ptr    dw  0;
-static_num1_ptr_ptr    dw  0;
+static_num1_ptr    dw  offset num1;
+static_num1_ptr_ptr    dw  offset static_num1_ptr;
 
 ; [belongs to (E)] - for the "dynamic" part, do NOT use the "offset"
 ; keyword and do NOT change the next two lines
@@ -53,6 +53,9 @@ start:
         PRINTN   "Part (C) - should print 15"
         mov     ax,10
         mov     bx,4
+        
+        mov si, ax
+        lea ax, [bx+si+1]
 
 
 		call	print_num
@@ -74,7 +77,13 @@ start:
 ; Write your code here
         PRINTN   "Part (E) - should print 7"
 
-; Do not change the next 4 lines
+; Do not change the next 4 lines      
+        lea ax, num1
+        mov dynamic_num1_ptr, ax
+        
+        lea ax, [dynamic_num1_ptr]
+        mov dynamic_num1_ptr_ptr, ax
+         
         mov     bx,dynamic_num1_ptr_ptr
         mov     bx,[bx]
         mov     ax,[bx]
