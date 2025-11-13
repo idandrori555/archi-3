@@ -40,6 +40,9 @@ start:
 ; PART (B)
 ; Print 'C'. Do not use 'chrs' but only 'chrs_ptr'
         PRINTN   "Part (B) - should print C"
+                           
+        mov bx, [chrs_ptr]
+        mov ax, [bx+2]
 
         call	print_al_chr
         PRINTN
