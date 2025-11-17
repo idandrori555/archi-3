@@ -5,6 +5,8 @@ size db 10
 row db 0
 col db 0
 
+const_size equ 10
+
 fill_rows:
     mov al, [row]
     cmp al, [size]
@@ -33,8 +35,8 @@ fill_cols:
     je set_one
 
     ; else curr = R above + L above
-    mov al, [arr + di - 10 - 1]   ; L above
-    add al, [arr + di - 10]       ; R above
+    mov al, [arr + di - const_size - 1]   ; L above
+    add al, [arr + di - const_size]       ; R above
     mov [arr + di], al
     jmp next_fill_col
 
@@ -52,38 +54,32 @@ next_fill_row:
 done_fill:
 mov row, 0
 
-print_rows:
-    mov al, [row]
-    cmp al, [size]
-    jge end
-    mov col, 0
-
-print_cols:
-    mov bl, [col]
-    cmp bl, [row]
-    jg next_print_row
-
-    ; row * size + col
-    mov al, [row]
-    xor ah, ah
-    mov cl, [size]
+print_sum_last_row:
+    xor ax, ax
+    mov al, [size]
+    mov cl, al
+    mov al, 9
     mul cl
+    mov si, ax
+    
+    xor ax, ax
+    xor cx, cx
+    
+sum_loop:
+    mov bl, size
+    cmp cl, bl
+    jge print
+    
     xor bx, bx
-    mov bl, [col]
+    mov bl, [arr + si]
     add ax, bx
-    mov di, ax
-    mov al, [arr + di]
-    xor ah, ah
-    call PRINT_NUM_UNS
-    PRINT " "
-
-    inc col
-    jmp print_cols
-
-next_print_row:
-    PRINTN ""
-    inc row
-    jmp print_rows
+    
+    inc si
+    inc cx
+    jmp sum_loop
+    
+print:
+call print_num
 
 end:
     mov ah, 0
